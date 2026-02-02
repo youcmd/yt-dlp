@@ -3464,8 +3464,8 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
                 https_fmts = []
 
                 for fmt_stream in streaming_formats:
-                    if fmt_stream.get('targetDurationSec'):
-                        continue
+                    # if fmt_stream.get('targetDurationSec'):
+                    #     continue
 
                     # FORMAT_STREAM_TYPE_OTF(otf=1) requires downloading the init fragment
                     # (adding `&sq=0` to the URL) and parsing emsg box to determine the
