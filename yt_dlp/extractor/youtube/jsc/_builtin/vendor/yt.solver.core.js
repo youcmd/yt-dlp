@@ -60,26 +60,6 @@ var jsc = (function (meriyah, astring) {
     }
     return value;
   }
-  const nsigExpression = {
-    type: 'VariableDeclaration',
-    kind: 'var',
-    declarations: [
-      {
-        type: 'VariableDeclarator',
-        init: {
-          type: 'CallExpression',
-          callee: { type: 'Identifier' },
-          arguments: [
-            { type: 'Literal' },
-            {
-              type: 'CallExpression',
-              callee: { type: 'Identifier', name: 'decodeURIComponent' },
-            },
-          ],
-        },
-      },
-    ],
-  };
   const logicalExpression = {
     type: 'ExpressionStatement',
     expression: {
@@ -206,57 +186,24 @@ var jsc = (function (meriyah, astring) {
       'call',
       (_8) => _8(-2),
     ]);
-    let call = null;
-    if (matchesStructure(relevantExpression, logicalExpression)) {
-      if (
-        _optionalChain$2([
-          relevantExpression,
-          'optionalAccess',
-          (_9) => _9.type,
-        ]) !== 'ExpressionStatement' ||
-        relevantExpression.expression.type !== 'LogicalExpression' ||
-        relevantExpression.expression.right.type !== 'SequenceExpression' ||
-        relevantExpression.expression.right.expressions[0].type !==
-          'AssignmentExpression' ||
-        relevantExpression.expression.right.expressions[0].right.type !==
-          'CallExpression'
-      ) {
-        return null;
-      }
-      call = relevantExpression.expression.right.expressions[0].right;
-    } else if (
+    if (!matchesStructure(relevantExpression, logicalExpression)) {
+      return null;
+    }
+    if (
       _optionalChain$2([
         relevantExpression,
         'optionalAccess',
-        (_10) => _10.type,
-      ]) === 'IfStatement' &&
-      relevantExpression.consequent.type === 'BlockStatement'
+        (_9) => _9.type,
+      ]) !== 'ExpressionStatement' ||
+      relevantExpression.expression.type !== 'LogicalExpression' ||
+      relevantExpression.expression.right.type !== 'SequenceExpression' ||
+      relevantExpression.expression.right.expressions[0].type !==
+        'AssignmentExpression'
     ) {
-      for (const n of relevantExpression.consequent.body) {
-        if (!matchesStructure(n, nsigExpression)) {
-          continue;
-        }
-        if (
-          n.type !== 'VariableDeclaration' ||
-          _optionalChain$2([
-            n,
-            'access',
-            (_11) => _11.declarations,
-            'access',
-            (_12) => _12[0],
-            'access',
-            (_13) => _13.init,
-            'optionalAccess',
-            (_14) => _14.type,
-          ]) !== 'CallExpression'
-        ) {
-          continue;
-        }
-        call = n.declarations[0].init;
-        break;
-      }
+      return null;
     }
-    if (call === null) {
+    const call = relevantExpression.expression.right.expressions[0].right;
+    if (call.type !== 'CallExpression' || call.callee.type !== 'Identifier') {
       return null;
     }
     return {
