@@ -2360,11 +2360,7 @@ from .voicy import (
     VoicyChannelIE,
     VoicyIE,
 )
-from .volejtv import (
-    VolejTVCategoryPlaylistIE,
-    VolejTVClubPlaylistIE,
-    VolejTVIE,
-)
+from .volejtv import VolejTVIE
 from .voxmedia import (
     VoxMediaIE,
     VoxMediaVolumeIE,
