@@ -11,7 +11,6 @@ from ..utils import (
     OnDemandPagedList,
     clean_html,
     extract_attributes,
-    url_or_none,
     urljoin,
 )
 from ..utils.traversal import (
@@ -129,7 +128,7 @@ class TarangPlusVideoIE(TarangPlusBaseIE):
             **traverse_obj(metadata, {
                 'id': ('content_id', {str}),
                 'title': ('title', {str}),
-                'thumbnail': ('image', {url_or_none}),
+                'thumbnail': ('image', {str}),
             }),
             **traverse_obj(hidden_inputs_data, {
                 'id': ('content_id', {str}),
